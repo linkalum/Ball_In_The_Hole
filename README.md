@@ -6,9 +6,11 @@ Master branch of the Open Source mini-game called "Ball in the Hole", which is a
 This is an open source project for developing and improving the mini-game called Ball in the Hole. The complete program is in JAVA. The director of this project is José Sirés Campos, and he reserves the right to discard any change at any time.
 
 
+
 About the language:
   
   The director of this project is from Spain and the library for drawing the game elements are in spanish. If someone see a translation that could be improved for better understanding feel free to change any word or expresion. Those improvements are always welcome.
+
 
 
 About building the game:
@@ -19,6 +21,7 @@ About building the game:
     - Open the lib folder on your Package explorer (usualy left sided), click the right button on paneles-vista.jar and select Build Path, and then Add to Build Path. Now the library paneles-vista.jar is built.
     - On the Package Explorer open the src folder, then open the game package. There you will find the Start.java file, which holds the main method for running the game. Open this file and then press the green play button (or Ctrl+F11).
     - The program will start, for begin a new game you should click on the white button called Nueva Partida (new game in spanish). For accelerate the ball press 'I' and for break it press 'K'. For turn in clockwise direction press 'L', and in counterclockwise direction press 'J'.
+
 
 
 About the comunication:
