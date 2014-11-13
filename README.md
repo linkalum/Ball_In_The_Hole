@@ -23,4 +23,4 @@ About building the game:
 
 About the comunication:
 
-  There are many ways to learn about this open source project. We have a wiki page on this GitHub repository (). We have also a Facebook page ()
+  There are many ways to learn about this open source project. We have a wiki page on this GitHub repository (github.com/linkalum/Ball_In_The_Hole/wiki). We have also a Facebook page (www.facebook.com/ballintheholeJSC) and a blog page (http://ballhole.blogspot.com/). For asking anything and until we have everything completely organized you can ask the director by mail (sires102@mail.chapman.edu) or by facebook (using the facebook page, not the chat).
