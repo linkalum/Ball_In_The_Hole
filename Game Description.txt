@@ -1,7 +1,0 @@
-Ball in the Hole  -  Game Description
----------------------------------------------------
-
-This Open Source mini-game consist in a scene where you control a ball, the main character, and you can move all arround the scene.
-In this scene there are several panels that add points to the player everytime the ball step on them.
-There are another panels that have special features. One increment/decrement the amount of points that panels can add to the player.
-Other are fragile panels that can crash and set a hole in the scene. If the ball goes through a hole it falls on it and the game is over.
