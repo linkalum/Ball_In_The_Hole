@@ -34,6 +34,7 @@ public class Game implements IControlador {
 
 	private Board board;
 	private IPantalla screen;
+	private int MAX_POINTS = 100;
 
 	@Override
 	public void abrir(String arg0) {
@@ -46,14 +47,21 @@ public class Game implements IControlador {
 	@Override
 	public void actualiza() {
 		if (this.board.update()) {
-			this.screen.setBarraEstado("Position: ["
-					+ board.getBall().getRegion().getCenter().getX() + ", "
-					+ board.getBall().getRegion().getCenter().getY()
-					+ "]            Speed: " + board.getBall().getSpeed()
-					+ "            Angle: " + board.getBall().getAngle()
-					+ "            Points: " + board.getBall().getPoints());
+			if (this.board.getScore() >= MAX_POINTS) {
+				this.board.stop();
+				JOptionPane.showMessageDialog(null, "YOU REACH 100 POINTS",
+						"NEW LEVEL", JOptionPane.CANCEL_OPTION);
+				newLevel();
+			} else {
+				this.screen.setBarraEstado("Position: ["
+						+ board.getBall().getRegion().getCenter().getX() + ", "
+						+ board.getBall().getRegion().getCenter().getY()
+						+ "]            Speed: " + board.getBall().getSpeed()
+						+ "            Angle: " + board.getBall().getAngle()
+						+ "            Points: " + board.getBall().getPoints());
+			}
 		} else {
-			this.board.parar();
+			this.board.stop();
 			JOptionPane.showMessageDialog(null, "YOU FELL INTO THE HOLE",
 					"GAME OVER", JOptionPane.CANCEL_OPTION);
 		}
@@ -131,18 +139,46 @@ public class Game implements IControlador {
 		}
 	}
 
+	private void newLevel() {
+		this.board = new Board(500, 500);
+		// AQUÍ SE AÑADE LA ACELERACIÓN DE LA BOLA.
+		this.board.settingBall(new Ball(new Circle(new Point(250, 250), 20)));
+		this.board.generatePanels(10, 10, 6, 3);
+		this.addSpecialPanels();
+		this.board.start();
+	}
+
 	/**
 	 * Implementation of nueva() method from IControlador interface [nueva =
 	 * new].
 	 */
 	@Override
 	public void nueva() {
-		this.board = new Board(500, 500);
-		this.board
-				.settingBall(new Ball(new Circle(new Point(250, 250), 20)));
-		this.board.generatePanels(10, 10, 6, 3);
-		this.addSpecialPanels();
-		this.board.start();
+		// HERE SHOULD BE THE MAIN TITLE AND THE MENU...
+		int selection = JOptionPane
+				.showOptionDialog(null, "Seleccione opcion",
+						"BALL IN THE HOLE", JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, new Object[] {
+								"START NEW GAME", "OPTIONS", "EXIT" },
+						"START NEW GAME");
+
+		if (selection == 0) {
+			// START NEW GAME
+			newLevel();
+		} else if (selection == 1) {
+			// OPTIONS
+			// // initial aceleration
+			// // number of points per level
+			// // number of levels
+			nueva();
+		} else {
+			// EXIT
+			newLevel();
+			this.board.stop();
+			JOptionPane.showMessageDialog(null, "HOPE TO SEE YOU SOON",
+					"GAME OVER", JOptionPane.CANCEL_OPTION);
+		}
+		// TRY TO DO IT WITH STYLE.
 	}
 
 	/**

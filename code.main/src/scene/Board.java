@@ -212,7 +212,7 @@ public class Board implements Dibujable {
 	 * <li>Precondition 1: The game status must be STARTED.</li>
 	 * </ul>
 	 */
-	public void parar() {
+	public void stop() {
 		if (this.gameStatus != Status.STARTED)
 			throw new IllegalStateException(
 					"The game status must be STARTED before stop.");
@@ -280,9 +280,9 @@ public class Board implements Dibujable {
 	}
 
 	/**
-	 * Método actualizar que hace avanzar la partida. Este método mueve la bola,
-	 * comprueba si rebota y maneja el rebote si procede y hace interactuar a la
-	 * bola con los paneles del tablero.
+	 * Method for update and move the game forward. This method moves the ball,
+	 * check and handle rebounds if there is one and make the ball interacts
+	 * with the board's panels.
 	 * 
 	 * <p>
 	 * <strong>Preconditions:</strong>
@@ -336,6 +336,6 @@ public class Board implements Dibujable {
 	@Override
 	public String getImagen() {
 		return "fondo"; // THE BACKGROUND NAME MUST BE fondo BECAUSE OF THE
-						// LIBRARY (I THINK). THIS COULD BE A THING TO FIX.
+						// LIBRARY. THIS COULD BE A THING TO FIX.
 	}
 }
