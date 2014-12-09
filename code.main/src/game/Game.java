@@ -4,7 +4,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import scene.Status;
 import scene.GrowingPanel;
@@ -35,6 +39,11 @@ public class Game implements IControlador {
 	private Board board;
 	private IPantalla screen;
 	private int MAX_POINTS = 100;
+	private int MAX_LEVELS = 3;
+	private int INIT_ACCELERATION = 1;
+	private int INIT_TURNANGLE = 15;
+	private boolean optionsChanged = false;
+	private int currentLevel;
 
 	@Override
 	public void abrir(String arg0) {
@@ -42,17 +51,24 @@ public class Game implements IControlador {
 
 	/**
 	 * Implementation of actualiza() method from IControlador interface
-	 * [actualiza = update].
+	 * [actualiza = update]. Here we control if the ball felt into a hole, if
+	 * the player win the game or if we just have to update all the screen.
 	 */
 	@Override
 	public void actualiza() {
 		if (this.board.update()) {
 			if (this.board.getScore() >= MAX_POINTS) {
 				this.board.stop();
-				JOptionPane.showMessageDialog(null, "YOU REACH 100 POINTS",
-						"NEW LEVEL", JOptionPane.CANCEL_OPTION);
-				newLevel();
+				JOptionPane.showMessageDialog(null, "YOU REACH " + MAX_POINTS
+						+ " POINTS", "NEW LEVEL", JOptionPane.CANCEL_OPTION);
+				if (currentLevel > 0)
+					newLevel();
+				else
+					JOptionPane.showMessageDialog(null, "YOU WON " + MAX_LEVELS
+							+ " LEVELS", "BIG WINNER",
+							JOptionPane.CANCEL_OPTION);
 			} else {
+				// [setBarraEstado = setStateBar]
 				this.screen.setBarraEstado("Position: ["
 						+ board.getBall().getRegion().getCenter().getX() + ", "
 						+ board.getBall().getRegion().getCenter().getY()
@@ -139,18 +155,61 @@ public class Game implements IControlador {
 		}
 	}
 
+	// Private method for starting a new level in the same game.
 	private void newLevel() {
+		this.currentLevel--;
 		this.board = new Board(500, 500);
-		// AQUÍ SE AÑADE LA ACELERACIÓN DE LA BOLA.
-		this.board.settingBall(new Ball(new Circle(new Point(250, 250), 20)));
+		if (this.optionsChanged) {
+			this.board.settingBall(new Ball(
+					new Circle(new Point(250, 250), 20), INIT_ACCELERATION,
+					INIT_TURNANGLE));
+		} else {
+			this.board
+					.settingBall(new Ball(new Circle(new Point(250, 250), 20)));
+		}
 		this.board.generatePanels(10, 10, 6, 3);
 		this.addSpecialPanels();
 		this.board.start();
 	}
 
+	// Private method for changing the game options.
+	private void options() {
+		JTextField init_acc_button = new JTextField();
+		JTextField init_turn_ang_button = new JTextField();
+		JTextField max_points_button = new JTextField();
+		JTextField max_level_button = new JTextField();
+
+		JPanel optionPanel = new JPanel();
+		optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
+		optionPanel.add(new JLabel("Initial acceleration:"));
+		optionPanel.add(init_acc_button);
+		optionPanel.add(new JLabel("Initial turn angle:"));
+		optionPanel.add(init_turn_ang_button);
+		optionPanel.add(new JLabel("Points per level:"));
+		optionPanel.add(max_points_button);
+		optionPanel.add(new JLabel("Number of levels:"));
+		optionPanel.add(max_level_button);
+
+		int result = JOptionPane.showConfirmDialog(null, optionPanel,
+				"OPTIONS.", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			this.INIT_ACCELERATION = Integer
+					.parseInt(init_acc_button.getText());
+			this.INIT_TURNANGLE = Integer.parseInt(init_turn_ang_button
+					.getText());
+			this.MAX_POINTS = Integer.parseInt(max_points_button.getText());
+			this.MAX_LEVELS = Integer.parseInt(max_level_button.getText());
+			this.optionsChanged = true;
+			this.currentLevel = MAX_LEVELS;
+			newLevel();
+		} else {
+			nueva();
+		}
+	}
+
 	/**
 	 * Implementation of nueva() method from IControlador interface [nueva =
-	 * new].
+	 * new]. Here we also implemented the main menu and the options menu.
 	 */
 	@Override
 	public void nueva() {
@@ -164,13 +223,11 @@ public class Game implements IControlador {
 
 		if (selection == 0) {
 			// START NEW GAME
+			this.currentLevel = MAX_LEVELS;
 			newLevel();
 		} else if (selection == 1) {
 			// OPTIONS
-			// // initial aceleration
-			// // number of points per level
-			// // number of levels
-			nueva();
+			options();
 		} else {
 			// EXIT
 			newLevel();
