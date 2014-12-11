@@ -126,6 +126,7 @@ public class Game implements IControlador {
 		return false;
 	}
 
+	// Private method for adding special panels.
 	private void addSpecialPanels() {
 		for (int i = 0; i < 4; i++) {
 			Random aleatory = new Random();
@@ -172,7 +173,8 @@ public class Game implements IControlador {
 		this.board.start();
 	}
 
-	// Private method for changing the game options.
+	// Private method for showing the options menu and changing the game
+	// options.
 	private void options() {
 		JTextField init_acc_button = new JTextField();
 		JTextField init_turn_ang_button = new JTextField();
@@ -193,15 +195,42 @@ public class Game implements IControlador {
 		int result = JOptionPane.showConfirmDialog(null, optionPanel,
 				"OPTIONS.", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			this.INIT_ACCELERATION = Integer
-					.parseInt(init_acc_button.getText());
-			this.INIT_TURNANGLE = Integer.parseInt(init_turn_ang_button
-					.getText());
-			this.MAX_POINTS = Integer.parseInt(max_points_button.getText());
-			this.MAX_LEVELS = Integer.parseInt(max_level_button.getText());
+			if (init_acc_button.getText().equals("")
+					|| Integer.parseInt(init_acc_button.getText()) <= 0)
+				this.INIT_ACCELERATION = 1;
+			else
+				this.INIT_ACCELERATION = Integer.parseInt(init_acc_button
+						.getText());
+
+			if (init_turn_ang_button.getText().equals("")
+					|| Integer.parseInt(init_turn_ang_button.getText()) <= 0)
+				this.INIT_TURNANGLE = 15;
+			else
+				this.INIT_TURNANGLE = Integer.parseInt(init_turn_ang_button
+						.getText());
+
+			if (max_points_button.getText().equals("")
+					|| Integer.parseInt(max_points_button.getText()) < 0)
+				this.MAX_POINTS = 100;
+			else
+				this.MAX_POINTS = Integer.parseInt(max_points_button.getText());
+
+			if (max_level_button.getText().equals("")
+					|| Integer.parseInt(max_level_button.getText()) < 0)
+				this.MAX_LEVELS = 3;
+			else
+				this.MAX_LEVELS = Integer.parseInt(max_level_button.getText());
+
 			this.optionsChanged = true;
-			this.currentLevel = MAX_LEVELS;
-			newLevel();
+			if (MAX_LEVELS == 0) {
+				newLevel();
+				this.board.stop();
+				JOptionPane.showMessageDialog(null, "YOU WON " + MAX_LEVELS
+						+ " LEVELS", "BIG WINNER", JOptionPane.CANCEL_OPTION);
+			} else {
+				this.currentLevel = MAX_LEVELS;
+				newLevel();
+			}
 		} else {
 			nueva();
 		}
@@ -209,11 +238,10 @@ public class Game implements IControlador {
 
 	/**
 	 * Implementation of nueva() method from IControlador interface [nueva =
-	 * new]. Here we also implemented the main menu and the options menu.
+	 * new]. Here we also implemented the main menu.
 	 */
 	@Override
 	public void nueva() {
-		// HERE SHOULD BE THE MAIN TITLE AND THE MENU...
 		int selection = JOptionPane
 				.showOptionDialog(null, "Seleccione opcion",
 						"BALL IN THE HOLE", JOptionPane.YES_NO_CANCEL_OPTION,
@@ -235,7 +263,6 @@ public class Game implements IControlador {
 			JOptionPane.showMessageDialog(null, "HOPE TO SEE YOU SOON",
 					"GAME OVER", JOptionPane.CANCEL_OPTION);
 		}
-		// TRY TO DO IT WITH STYLE.
 	}
 
 	/**
