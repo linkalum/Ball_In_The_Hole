@@ -38,10 +38,12 @@ public class Game implements IControlador {
 
 	private Board board;
 	private IPantalla screen;
+	// OPTIONS
 	private int MAX_POINTS = 100;
 	private int MAX_LEVELS = 3;
 	private int INIT_ACCELERATION = 1;
 	private int INIT_TURNANGLE = 15;
+	// OPTIONS AUX
 	private boolean optionsChanged = false;
 	private int currentLevel;
 
@@ -183,9 +185,12 @@ public class Game implements IControlador {
 
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
-		optionPanel.add(new JLabel("Initial acceleration:"));
+		optionPanel.add(new JLabel("Initial acceleration (0-10):"));
+		optionPanel.add(new JLabel("'I' = accelerate    |      'K' = break"));
 		optionPanel.add(init_acc_button);
-		optionPanel.add(new JLabel("Initial turn angle:"));
+		optionPanel.add(new JLabel("Initial turn angle (0-360):"));
+		optionPanel.add(new JLabel(
+				"'J' = turn left         |      'L' = turn right"));
 		optionPanel.add(init_turn_ang_button);
 		optionPanel.add(new JLabel("Points per level:"));
 		optionPanel.add(max_points_button);

@@ -28,6 +28,10 @@ public class Board implements Dibujable {
 	private LinkedList<Panel> collectionOfPanels;
 	private Ball ball;
 	private Status gameStatus;
+	// AUXILIAR ATTRIBUTES
+	private boolean[] arrayCells;
+	private int horCells;
+	private int vertCells;
 
 	/**
 	 * Constructor of a board. This constructor creates a board with the
@@ -147,11 +151,12 @@ public class Board implements Dibujable {
 			throw new IllegalStateException(
 					"The game status must be NON_STARTED.");
 		else {
-			if (!this.region.isInside(panel.getRegion()))
+			if (!this.region.isInside(panel.getRegion())) {
 				throw new IllegalArgumentException(
 						"The panel must be inside the board.");
-			else
-				this.collectionOfPanels.addLast(panel);
+			} else {
+				alignPanel(panel);
+			}
 		}
 	}
 
@@ -220,6 +225,32 @@ public class Board implements Dibujable {
 			this.gameStatus = Status.ENDED;
 	}
 
+	// Private method for align all the panels to a crossline and to prevent
+	// panels overlaping.
+	private void alignPanel(Panel panel) {
+		int cell = (panel.getRegion().getLowestY() / (this.height / this.vertCells))
+				* this.horCells
+				+ (panel.getRegion().getLowestX() / (this.width / this.horCells));
+
+		int cont = this.collectionOfPanels.size();
+		while (cont == this.collectionOfPanels.size()) {
+			if (!this.arrayCells[cell]) {
+				int x = (cell % this.horCells) * (this.width / this.horCells);
+				int y = (cell / this.vertCells)
+						* (this.height / this.vertCells);
+				Rectangle newRegion = new Rectangle(new Point(x, y), this.width
+						/ this.horCells, this.height / this.vertCells);
+				panel.setRegion(newRegion);
+				this.collectionOfPanels.add(panel);
+				this.arrayCells[cell] = true;
+			} else {
+				Random aleatorium = new Random();
+				int adding = aleatorium.nextInt(this.horCells * this.vertCells);
+				cell = (cell + adding) % (this.horCells * this.vertCells);
+			}
+		}
+	}
+
 	/**
 	 * Method for generate and add panels to the board. This method generates
 	 * panels and place them on the board randomly for having several different
@@ -257,25 +288,21 @@ public class Board implements Dibujable {
 			throw new IllegalArgumentException(
 					"The number of panels must not be bigger than the board's number of cells.");
 
-		boolean[] arrayCells = new boolean[cellsX * cellsY];
+		// Initialize arrayCells
+		this.arrayCells = new boolean[cellsX * cellsY];
+		this.horCells = cellsX;
+		this.vertCells = cellsY;
 		for (int i = 0; i < numPanels; i++) {
-			int cont = collectionOfPanels.size();
-			while (cont == collectionOfPanels.size()) {
-				// Build a random point.
-				Random aleatorium = new Random();
-				int cell = aleatorium.nextInt(cellsX * cellsY);
-				int x = (cell % cellsX) * (this.width / cellsX);
-				int y = (cell / cellsY) * (this.height / cellsY);
-				Point randomPoint = new Point(x, y);
-				// Check if the point is valid and add it.
-				if (!arrayCells[cell]) {
-					Panel newPanel = new Panel(new Rectangle(randomPoint,
-							(this.width / cellsX), (this.height / cellsY)),
-							points);
-					collectionOfPanels.add(newPanel);
-					arrayCells[cell] = true;
-				}
-			}
+			// Build a random point.
+			Random aleatorium = new Random();
+			int x = aleatorium.nextInt(this.width);
+			int y = aleatorium.nextInt(this.height);
+			Point randomPoint = new Point(x, y);
+			// Build a random panel.
+			Panel newPanel = new Panel(new Rectangle(randomPoint,
+					(this.width / cellsX), (this.height / cellsY)), points);
+			// Check and add the random panel.
+			alignPanel(newPanel);
 		}
 	}
 
