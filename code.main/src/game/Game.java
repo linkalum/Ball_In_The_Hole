@@ -247,6 +247,10 @@ public class Game implements IControlador {
 	 */
 	@Override
 	public void nueva() {
+		this.MAX_POINTS = 100;
+		this.MAX_LEVELS = 3;
+		this.INIT_ACCELERATION = 1;
+		this.INIT_TURNANGLE = 15;
 		int selection = JOptionPane
 				.showOptionDialog(null, "Seleccione opcion",
 						"BALL IN THE HOLE", JOptionPane.YES_NO_CANCEL_OPTION,
