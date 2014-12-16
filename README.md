@@ -5,6 +5,11 @@ Master branch of the Open Source mini-game called "Ball in the Hole", which is a
 
 This is an open source project for developing and improving the mini-game called Ball in the Hole. The complete program is in JAVA. The director of this project is José Sirés Campos, and he reserves the right to discard any change at any time.
 
+________________________________________________________________________________________________________________
+Try the game:
+
+    To try the game you just have to download the folder Application with all its components and then run the "Ball In The Hole.jar" file. ENJOY!!!
+
 
 ________________________________________________________________________________________________________________
 About the language:
