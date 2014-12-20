@@ -147,6 +147,7 @@ public class Board implements Dibujable {
 	 *            The panel to add.
 	 */
 	public void addPanel(Panel panel) {
+		Rectangle region = panel.getRegion();
 		if (this.gameStatus != Status.NON_STARTED)
 			throw new IllegalStateException(
 					"The game status must be NON_STARTED.");
@@ -154,6 +155,9 @@ public class Board implements Dibujable {
 			if (!this.region.isInside(panel.getRegion())) {
 				throw new IllegalArgumentException(
 						"The panel must be inside the board.");
+			} else if(region.isInside(this.ball.getRegion())) {
+				throw new IllegalArgumentException(
+						"The panel must not be created in the ball's location.");
 			} else {
 				alignPanel(panel);
 			}
@@ -231,7 +235,7 @@ public class Board implements Dibujable {
 		int cell = (panel.getRegion().getLowestY() / (this.height / this.vertCells))
 				* this.horCells
 				+ (panel.getRegion().getLowestX() / (this.width / this.horCells));
-
+		
 		int cont = this.collectionOfPanels.size();
 		while (cont == this.collectionOfPanels.size()) {
 			if (!this.arrayCells[cell]) {
